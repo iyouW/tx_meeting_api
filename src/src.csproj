@@ -9,6 +9,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="TencentCloudSDK" Version="3.0.253" />
     <PackageReference Include="tls-sig-api-v2" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="5.0.1" />
   </ItemGroup>
 
 </Project>

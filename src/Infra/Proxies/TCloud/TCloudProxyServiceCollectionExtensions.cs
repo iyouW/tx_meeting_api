@@ -10,6 +10,9 @@ namespace Chat_Room_Api.Infra.Proxies.TCloud
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
     using Microsoft.Extensions.Configuration;
+    using Polly;
+
+    using System;
 
     public static class TCloudProxyServiceCollectionExtensions
     {
@@ -29,9 +32,11 @@ namespace Chat_Room_Api.Infra.Proxies.TCloud
         {
             services.Configure<TIMOption>(timConfiguration);
 
-            services.AddHttpClient<ITIMProxyService, TIMProxyService>(c =>{
+            services.AddHttpClient<ITIMProxyService, TIMProxyService>(c =>
+            {
                 c.BaseAddress = new System.Uri(timConfiguration.GetValue<string>("BaseUrl"));
-            });
+            })
+            .AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
 
             services.TryAddTransient<ITIMProxy, TIMProxy>();
 
